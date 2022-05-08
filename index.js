@@ -22,6 +22,7 @@ async function run() {
   try {
     await client.connect();
     const productCollection = client.db("fragrantica").collection("products");
+    // const orderCollection = client.db("geniusCar").collection("order");
 
     // load all service from mongodb
     app.get("/products", async (req, res) => {
@@ -37,6 +38,21 @@ async function run() {
       const product = await productCollection.findOne(query);
       res.send(product);
     });
+
+    // order collection
+    // app.post("/order", async (req, res) => {
+    //     const order = req.body;
+    //     const result = await orderCollection.insertOne(order);
+    //     res.send(result);
+    //   });
+    //   app.get("/order", async (req, res) => {
+    //     const email = req.query.email;
+    //     console.log(email);
+    //     const query = { email: email };
+    //     const cursor = orderCollection.find(query);
+    //     const orders = await cursor.toArray();
+    //     res.send(orders);
+    //   });
   } finally {
     // client.close()
   }
