@@ -31,6 +31,19 @@ async function run() {
       const products = await cursor.toArray();
       res.send(products);
     });
+    // Post a single product with email
+    app.post("/products", async (req, res) => {
+      const newProduct = req.body;
+      const result = await productCollection.insertOne(newProduct);
+      res.send(result);
+    });
+    // Delete single product
+    app.delete("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await productCollection.deleteOne(query);
+      res.send(result);
+    });
     // load single product data from mongodb
     app.get("/products/:id", async (req, res) => {
       const id = req.params.id;
@@ -41,18 +54,18 @@ async function run() {
 
     // order collection
     // app.post("/order", async (req, res) => {
-    //     const order = req.body;
-    //     const result = await orderCollection.insertOne(order);
-    //     res.send(result);
-    //   });
-    //   app.get("/order", async (req, res) => {
-    //     const email = req.query.email;
-    //     console.log(email);
-    //     const query = { email: email };
-    //     const cursor = orderCollection.find(query);
-    //     const orders = await cursor.toArray();
-    //     res.send(orders);
-    //   });
+    //   const order = req.body;
+    //   const result = await orderCollection.insertOne(order);
+    //   res.send(result);
+    // });
+    // app.get("/order", async (req, res) => {
+    //   const email = req.query.email;
+    //   console.log(email);
+    //   const query = { email: email };
+    //   const cursor = orderCollection.find(query);
+    //   const orders = await cursor.toArray();
+    //   res.send(orders);
+    // });
   } finally {
     // client.close()
   }
