@@ -37,7 +37,7 @@ async function run() {
       const result = await productCollection.insertOne(newProduct);
       res.send(result);
     });
-    // update a product
+    // update a product quantity
     app.put("/products/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: ObjectId(id) };
@@ -50,6 +50,7 @@ async function run() {
       const result = await productCollection.updateOne(filter, updatedDoc);
       res.send(result);
     });
+
     // Delete single product
     app.delete("/products/:id", async (req, res) => {
       const id = req.params.id;
