@@ -38,6 +38,14 @@ async function run() {
       const result = await productCollection.insertOne(newProduct);
       res.send(result);
     });
+    // my items
+    app.get("/products", async (req, res) => {
+      const query = { email: req?.query?.email };
+      const cursor = orderCollection.find(query);
+      const result = await cursor.toArray();
+      console.log(query);
+      res.send(result);
+    });
     // update a product quantity
     app.put("/products/:id", async (req, res) => {
       const id = req.params.id;
