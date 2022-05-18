@@ -23,7 +23,6 @@ async function run() {
     await client.connect();
     const productCollection = client.db("fragrantica").collection("products");
     const reviewsCollection = client.db("fragrantica").collection("reviews");
-    // const orderCollection = client.db("geniusCar").collection("order");
 
     // load all service from mongodb
     app.get("/products", async (req, res) => {
@@ -35,7 +34,9 @@ async function run() {
     // get my item
     app.get("/myitem", async (req, res) => {
       const email = req.query.email;
+      console.log("query = ", email);
       const query = { email: email };
+
       const cursor = productCollection.find(query);
       const products = await cursor.toArray();
       res.send(products);
