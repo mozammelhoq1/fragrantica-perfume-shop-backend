@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
@@ -10,21 +9,6 @@ const app = express();
 // middle ware
 app.use(cors());
 app.use(express.json());
-// function verifyJWT(req, res, next) {
-//   const authHeader = req.headers.authorization;
-//   if (!authHeader) {
-//     return res.status(401).send({ message: "unauthorized access" });
-//   }
-//   const token = authHeader.split(" ")[1];
-//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-//     if (err) {
-//       return res.status(403).send({ message: "Forbidden access" });
-//     }
-//     console.log("decoded", decoded);
-//     req.decoded = decoded;
-//     next();
-//   });
-// }
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.qpuyy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
@@ -57,18 +41,13 @@ async function run() {
       const products = await cursor.toArray();
       res.send(products);
     });
-    // verifyJWT
+    // get my item
     app.get("/myitem", async (req, res) => {
-      const decodedEmail = req.decoded.email;
       const email = req.query.email;
-      if (email === decodedEmail) {
-        const query = { email: email };
-        const cursor = productCollection.find(query);
-        const products = await cursor.toArray();
-        res.send(products);
-      } else {
-        res.status(403).send({ message: "forbidden access" });
-      }
+      const query = { email: email };
+      const cursor = productCollection.find(query);
+      const products = await cursor.toArray();
+      res.send(products);
     });
     // Post a single product with email
     app.post("/products", async (req, res) => {
@@ -76,16 +55,7 @@ async function run() {
       const result = await productCollection.insertOne(newProduct);
       res.send(result);
     });
-    // my items
-    // app.get("/products", async (req, res) => {
-    //   const email = req.params;
-    //   console.log(email);
-    //   const query = {};
-    //   const cursor = productCollection.find(query);
-    //   const result = await cursor.toArray();
-    //   console.log(query);
-    //   res.send(result);
-    // });
+
     // update a product quantity
     app.put("/products/:id", async (req, res) => {
       const id = req.params.id;
