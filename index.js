@@ -25,15 +25,6 @@ async function run() {
     const reviewsCollection = client.db("fragrantica").collection("reviews");
     // const orderCollection = client.db("geniusCar").collection("order");
 
-    // authentication
-    app.post("/login", async (req, res) => {
-      const user = req.body;
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "3d",
-      });
-      res.send({ accessToken });
-    });
-
     // load all service from mongodb
     app.get("/products", async (req, res) => {
       const query = {};
